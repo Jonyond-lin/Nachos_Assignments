@@ -11,10 +11,14 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "dllist.h"
+#include <cstdio>
+
+using namespace std;
 
 // testnum is set in main.cc
 int testnum = 1;
-
+DLList *list;
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -23,16 +27,22 @@ int testnum = 1;
 //	"which" is simply a number identifying the thread, for debugging
 //	purposes.
 //----------------------------------------------------------------------
-
+void GenerateNItems(int N, DLList *list);
+void RemoveNItems(int N, DLList *list);
 void
 SimpleThread(int which)
 {
-    int num;
-    
-    for (num = 0; num < 5; num++) {
-	printf("*** thread %d looped %d times\n", which, num);
-        currentThread->Yield();
-    }
+	printf("No.%d thread\n", which);
+	list->Append(NULL);
+	currentThread->Yield();
+	printf("No.%d thread\n", which);
+	list->Prepend(NULL);
+	currentThread->Yield();
+	printf("No.%d thread\n", which);
+	RemoveNItems(1,list);
+	currentThread->Yield();
+	printf("No.%d thread\n", which);
+	RemoveNItems(1,list);
 }
 
 //----------------------------------------------------------------------
@@ -60,6 +70,7 @@ ThreadTest1()
 void
 ThreadTest()
 {
+	list = new DLList();
     switch (testnum) {
     case 1:
 	ThreadTest1();

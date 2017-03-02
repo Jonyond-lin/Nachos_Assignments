@@ -37,7 +37,7 @@ void GenerateNItems(int N, DLList *list)
 			keyTemp = random(1, N * 2);
 		}
 		list->SortedInsert((DLLElement *)NULL, keyTemp);
-		cout << "The item with key " << keyTemp << " has been inserted into the list." << endl;
+		cout << "A item with key:" << keyTemp << " has been inserted into the list." << endl;
 	}
 }
 

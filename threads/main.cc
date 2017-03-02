@@ -52,7 +52,7 @@
 
 #include "utility.h"
 #include "system.h"
-
+#include "hello.h"
 #ifdef THREADS
 extern int testnum;
 #endif
@@ -100,7 +100,7 @@ main(int argc, char **argv)
         break;
       }
     }
-
+	hello();
     ThreadTest();
 #endif
 

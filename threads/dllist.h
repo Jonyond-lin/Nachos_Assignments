@@ -1,7 +1,7 @@
 #pragma once
-
-int max_key = 0, min_key = 10000;
-
+#ifndef DLLIST_H
+#define DLLIST_H
+#define NULL (void *)0
 class DLLElement {
 public:
 	DLLElement(void *itemPtr, int sortKey); // initialize a list element
@@ -16,7 +16,7 @@ class DLList {
 public:
 	DLList(); // initialize the list
 	~DLList(); // de-allocate the list
-
+	
 	void Prepend(void *item); // add to head of list (set key = min_key-1)
 	void Append(void *item); // add to tail of list (set key = max_key+1)
 	void *Remove(int *keyPtr); // remove from head of list
@@ -33,4 +33,8 @@ public:
 private:
 	DLLElement *first; // head of the list, NULL if empty
 	DLLElement *last; // last element of the list, NULL if empty
+public:
+	int length;
+	int max_key, min_key;
 };
+#endif
