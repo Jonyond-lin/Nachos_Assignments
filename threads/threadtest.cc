@@ -32,19 +32,15 @@ void RemoveNItems(int N, DLList *list);
 void
 SimpleThread(int which)
 {
-	printf("No.%d thread\n", which);
-	list->Append(NULL);
+	printf("Thread %d\n", which);
+	GenerateNItems(5, list);
 	currentThread->Yield();
-	printf("No.%d thread\n", which);
-	list->Prepend(NULL);
+	printf("Thread %d\n", which);
+	RemoveNItems(2, list);
 	currentThread->Yield();
-	printf("No.%d thread\n", which);
-	RemoveNItems(1,list);
-	currentThread->Yield();
-	printf("No.%d thread\n", which);
-	RemoveNItems(1,list);
+	printf("Thread %d\n", which);
+	RemoveNItems(3, list);
 }
-
 //----------------------------------------------------------------------
 // ThreadTest1
 // 	Set up a ping-pong between two threads, by forking a thread 
