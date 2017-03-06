@@ -30,15 +30,15 @@ DLList *list;
 void GenerateNItems(int N, DLList *list);
 void RemoveNItems(int N, DLList *list);
 void
-SimpleThread(int which)
+SimpleThread1(int which)
 {
-	printf("Thread %d\n", which);
+	// printf("Thread %d\n", which);
 	GenerateNItems(5, list);
 	currentThread->Yield();
-	printf("Thread %d\n", which);
+	// printf("Thread %d\n", which);
 	RemoveNItems(2, list);
 	currentThread->Yield();
-	printf("Thread %d\n", which);
+	// printf("Thread %d\n", which);
 	RemoveNItems(3, list);
 }
 //----------------------------------------------------------------------
@@ -48,14 +48,14 @@ SimpleThread(int which)
 //----------------------------------------------------------------------
 
 void
-ThreadTest1()
+ThreadTest1(void (*p)(int))
 {
-    DEBUG('t', "Entering ThreadTest1");
+    DEBUG('t', "Entering ThreadTest1\n");
 
     Thread *t = new Thread("forked thread");
 
-    t->Fork(SimpleThread, 1);
-    SimpleThread(0);
+    t->Fork(p, 1);
+    p(0);
 }
 
 //----------------------------------------------------------------------
@@ -69,7 +69,7 @@ ThreadTest()
 	list = new DLList();
     switch (testnum) {
     case 1:
-	ThreadTest1();
+	ThreadTest1(SimpleThread1);
 	break;
     default:
 	printf("No test specified.\n");
