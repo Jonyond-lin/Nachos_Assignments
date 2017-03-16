@@ -1,4 +1,6 @@
 #include "dllist.h"
+#include "system.h"
+#include "dllist.h"
 
 DLList::DLList()
 {
@@ -58,6 +60,8 @@ void * DLList::Remove(int * keyPtr)
 	{
 		*keyPtr = first->key;
 		void *item;
+currentThread->Yield();
+
 		if(first->next == NULL)
 		{
 			item = first->item;
@@ -71,6 +75,8 @@ void * DLList::Remove(int * keyPtr)
 		delete first;
 		first = t;
 		length--;
+currentThread->Yield();
+
 		return item;
 	}
 }
