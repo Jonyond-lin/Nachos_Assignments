@@ -62,3 +62,23 @@ void RemoveNItems(int N, DLList *list)
 		cout << "The item with key:" << keyTemp << " has been removed!" << endl;
 	}
 }
+void MergeNItems(DLList *list){
+	//Merge the first and the second item
+	if(list == (DLList *)NULL || list->IsEmpty())
+	{
+		cerr << "ERROR: The list is empty!!!" << endl;
+		return;
+	}
+	DLLElement *pp = list->first;
+	int a = pp->key;
+	pp = pp->next;
+	if(pp == NULL)
+		cout<<"The result is:"<<a<<endl;
+	else	
+	{
+		int b = pp->key;
+		pp->key += a;
+		cout<<"result:"<<a<<"+"<<b<<"="<<pp->key<<endl;
+	}
+	RemoveNItems(1,list);
+}
