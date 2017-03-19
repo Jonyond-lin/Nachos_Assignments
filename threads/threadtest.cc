@@ -62,6 +62,18 @@ void SimpleThread2(int which)
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
 
+void 
+SimpleThread3(int which)
+{
+	if(list->IsEmpty()){
+		GenerateNItems(1, list);
+	}
+	
+		currentThread->Yield();
+	RemoveNItems(1, list);
+	currentThread->Yield();
+}
+
 void
 ThreadTest1(void (*p)(int))
 {
@@ -81,7 +93,7 @@ ThreadTest1(void (*p)(int))
 void
 ThreadTest()
 {
-	testnum = 2;
+	testnum = 3;
 	list = new DLList();
     switch (testnum) {
     case 1:
@@ -90,6 +102,9 @@ ThreadTest()
     case 2:
 	ThreadTest1(SimpleThread2);
 	break;
+    case 3:
+	ThreadTest1(SimpleThread3);
+
     default:
 	printf("No test specified.\n");
 	break;
