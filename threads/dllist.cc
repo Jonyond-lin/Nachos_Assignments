@@ -98,6 +98,7 @@ void DLList::SortedInsert(void * item, int sortKey)
 
 	if (IsEmpty())
 	{
+		currentThread->Yield();
 		first = last = t;
 		t->next = t->prev = (DLLElement *)NULL;
 	}
