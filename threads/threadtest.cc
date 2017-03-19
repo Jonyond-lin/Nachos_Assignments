@@ -29,6 +29,7 @@ DLList *list;
 //----------------------------------------------------------------------
 void GenerateNItems(int N, DLList *list);
 void RemoveNItems(int N, DLList *list);
+void MergeNItems(DLList *list);
 void
 SimpleThread1(int which)
 {
@@ -41,11 +42,37 @@ SimpleThread1(int which)
 	// printf("Thread %d\n", which);
 	RemoveNItems(3, list);
 }
+void SimpleThread2(int which)
+{
+	GenerateNItems(3,list);
+	currentThread->Yield();
+	
+	MergeNItems(list);//Merge 1&2
+	currentThread->Yield();
+
+	MergeNItems(list);//Merge 2&3
+	currentThread->Yield();
+
+	MergeNItems(list);//print result
+}
+
 //----------------------------------------------------------------------
 // ThreadTest1
 // 	Set up a ping-pong between two threads, by forking a thread 
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
+
+void 
+SimpleThread3(int which)
+{
+	if(list->IsEmpty()){
+		GenerateNItems(1, list);
+	}
+	
+		currentThread->Yield();
+	RemoveNItems(1, list);
+	currentThread->Yield();
+}
 
 void
 ThreadTest1(void (*p)(int))
@@ -66,14 +93,21 @@ ThreadTest1(void (*p)(int))
 void
 ThreadTest()
 {
+	testnum = 3;
 	list = new DLList();
     switch (testnum) {
     case 1:
 	ThreadTest1(SimpleThread1);
 	break;
+    case 2:
+	ThreadTest1(SimpleThread2);
+	break;
+    case 3:
+	ThreadTest1(SimpleThread3);
+
     default:
 	printf("No test specified.\n");
 	break;
     }
-}
+}	
 

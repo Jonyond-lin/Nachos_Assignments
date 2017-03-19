@@ -30,7 +30,6 @@ public:
 	void *SortedRemove(int sortKey); // remove first item with key==sortKey
 									 // return NULL if no such item exists
 									 
-private:
 	DLLElement *first; // head of the list, NULL if empty
 	DLLElement *last; // last element of the list, NULL if empty
 public:
