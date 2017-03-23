@@ -93,7 +93,6 @@ ThreadTest1(void (*p)(int))
 void
 ThreadTest()
 {
-	testnum = 3;
 	list = new DLList();
     switch (testnum) {
     case 1:
@@ -104,7 +103,10 @@ ThreadTest()
 	break;
     case 3:
 	ThreadTest1(SimpleThread3);
-
+	break;
+    case 4:
+	ThreadTest1(SimpleThread1);
+	break;
     default:
 	printf("No test specified.\n");
 	break;

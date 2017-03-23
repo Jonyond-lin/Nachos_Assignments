@@ -2,6 +2,7 @@
 #include "system.h"
 #include "dllist.h"
 
+extern int testnum;
 DLList::DLList()
 {
 	first = last = (DLLElement *)NULL;
@@ -98,7 +99,9 @@ void DLList::SortedInsert(void * item, int sortKey)
 
 	if (IsEmpty())
 	{
-		currentThread->Yield();
+		if(testnum == 4) {
+			currentThread->Yield();
+		}
 		first = last = t;
 		t->next = t->prev = (DLLElement *)NULL;
 	}
