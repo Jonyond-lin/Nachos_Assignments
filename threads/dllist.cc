@@ -61,7 +61,10 @@ void * DLList::Remove(int * keyPtr)
 	{
 		*keyPtr = first->key;
 		void *item;
-currentThread->Yield();
+		if(3 == testnum)
+		{
+			currentThread->Yield();
+		}
 
 		if(first->next == NULL)
 		{
@@ -76,8 +79,10 @@ currentThread->Yield();
 		delete first;
 		first = t;
 		length--;
-currentThread->Yield();
-
+		if(3 == testnum)
+		{
+			currentThread->Yield();
+		}
 		return item;
 	}
 }
