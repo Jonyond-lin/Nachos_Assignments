@@ -24,7 +24,7 @@
 #include "copyright.h"
 #include "synch.h"
 #include "system.h"
-
+#include <cstring>
 //----------------------------------------------------------------------
 // Semaphore::Semaphore
 // 	Initialize a semaphore, so that it can be used for synchronization.
@@ -100,13 +100,61 @@ Semaphore::V()
 // Dummy functions -- so we can compile our later assignments 
 // Note -- without a correct implementation of Condition::Wait(), 
 // the test case in the network assignment won't work!
-Lock::Lock(char* debugName) {}
-Lock::~Lock() {}
-void Lock::Acquire() {}
-void Lock::Release() {}
-
-Condition::Condition(char* debugName) { }
+Lock::Lock(char* debugName) 
+{
+	name = debugName;
+	holdingThread = NULL;
+	isLocked = false;
+	queue = new List;
+}
+Lock::~Lock()
+{
+	delete queue;
+}
+void Lock::Acquire() 
+{
+	DEBUG('l', "%s thread is acquiring a lock.\n", currentThread->getName());
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+	if(isLocked)
+	{
+		DEBUG('l', "%s thread finds that the lock is locked, sleep...\n", currentThread->getName());
+		queue->Append((void *)currentThread);
+		currentThread->Sleep();
+	}
+	DEBUG('l', "%s thread have accquired the lock.\n", currentThread->getName());
+	isLocked = true;
+	holdingThread = currentThread;
+	(void) interrupt->SetLevel(oldLevel);
+}
+void Lock::Release() 
+{
+	DEBUG('l', "%s thread is releasing the lock.\n", currentThread->getName());
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+	Thread *thread = (Thread *)queue->Remove();
+	if(thread != NULL)
+	{
+		isLocked = false;
+		scheduler->ReadyToRun(thread);
+	}
+	interrupt->SetLevel(oldLevel);
+}
+bool Lock::isHeldByCurrentThread()
+{
+	return holdingThread == currentThread;
+}
+Condition::Condition(char* debugName)
+{
+	numWaiting = 0;
+	queue = new List;
+	name = debugName;
+}
 Condition::~Condition() { }
-void Condition::Wait(Lock* conditionLock) { ASSERT(FALSE); }
+void Condition::Wait(Lock* conditionLock) 
+{
+	numWaiting++;
+	queue.Append((void *)currentThread);
+	conditionLock->Release();
+
+}
 void Condition::Signal(Lock* conditionLock) { }
 void Condition::Broadcast(Lock* conditionLock) { }

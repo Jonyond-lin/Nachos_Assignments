@@ -13,12 +13,13 @@
 #include "system.h"
 #include "dllist.h"
 #include <cstdio>
-
+#include "synch.h"
 using namespace std;
 
 // testnum is set in main.cc
 int testnum = 1;
 DLList *list;
+Lock *lock;
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -33,14 +34,17 @@ void MergeNItems(DLList *list);
 void
 SimpleThread1(int which)
 {
+	lock->Acquire();
 	// printf("Thread %d\n", which);
 	GenerateNItems(5, list);
 	currentThread->Yield();
 	// printf("Thread %d\n", which);
+	
 	RemoveNItems(2, list);
 	currentThread->Yield();
 	// printf("Thread %d\n", which);
 	RemoveNItems(3, list);
+	lock->Release();
 }
 void SimpleThread2(int which)
 {
@@ -93,6 +97,7 @@ ThreadTest1(void (*p)(int))
 void
 ThreadTest()
 {
+	lock = new Lock("dllist lock");
 	list = new DLList();
     switch (testnum) {
     case 1:
