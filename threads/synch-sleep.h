@@ -81,7 +81,6 @@ class Lock {
     char* name;				// for debugging
    	Thread *holdingThread;
 	bool isLocked;
-	Semaphore *semaphore;
 	List *queue;
 	// plus some other stuff you'll need to define
 };

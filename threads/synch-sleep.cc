@@ -106,24 +106,38 @@ Lock::Lock(char* debugName)
 	holdingThread = NULL;
 	isLocked = false;
 	queue = new List;
-	semaphore = new Semaphore("the semaphore of the lock", 1);
 }
 Lock::~Lock()
 {
 	delete queue;
-	delete semaphore;
 }
 void Lock::Acquire() 
 {
 	DEBUG('l', "%s thread is acquiring a lock.\n", currentThread->getName());
-	semaphore->P();
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+	if(isLocked)
+	{
+		DEBUG('l', "%s thread finds that the lock is locked, sleep...\n", currentThread->getName());
+		queue->Append((void *)currentThread);
+		currentThread->Sleep();
+	}
+	DEBUG('l', "%s thread have accquired the lock.\n", currentThread->getName());
+	isLocked = true;
 	holdingThread = currentThread;
+	(void) interrupt->SetLevel(oldLevel);
 }
 void Lock::Release() 
 {
 	DEBUG('l', "%s thread is releasing the lock.\n", currentThread->getName());
 	ASSERT(isHeldByCurrentThread());
-	semaphore->V();
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+	Thread *thread = (Thread *)queue->Remove();
+	if(NULL != thread)
+	{
+		isLocked = false;
+		scheduler->ReadyToRun(thread);
+	}
+	interrupt->SetLevel(oldLevel);
 }
 bool Lock::isHeldByCurrentThread()
 {
@@ -142,39 +156,50 @@ Condition::~Condition()
 void Condition::Wait(Lock* conditionLock) 
 {
 	ASSERT(conditionLock->isHeldByCurrentThread());
-	Semaphore *waiter = new Semaphore("the semaphore in the CV", 0); // Two meanings: 1. the waiter scheduling the entrance of the monitor
-	// 2. the waiting process of the condition varaibles
-	queue->Append((void *) waiter);
+	
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+	
+	numWaiting++;
+	queue.Append((void *)currentThread);
 	conditionLock->Release();
-	waiter->P();
+	currentThread->Sleep();
 	conditionLock->Acquire();
 	
-	delete waiter;	
+	interrupt->SetLevel(oldLevel);
 }
 void Condition::Signal(Lock* conditionLock) 
 {
 	ASSERT(conditionLock->isHeldByCurrentThread());
 	
-	if (!queue->IsEmpty())
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+	if (numWaiting > 0)
 	{
-		Semaphore *waiter = (Semaphore *) queue->Remove();
-		if (NULL != waiter) 
+		Thread *thread = (Thread *) queue.Remove();
+		if (NULL != thread)
 		{
-			waiter->V();
+			numWaiting--;
+			scheduler->ReadyToRun(thread);
 		}
 	}
+
+	interrupt->SetLevel(oldLevel);
 }
 void Condition::Broadcast(Lock* conditionLock)
 {
-	ASSERT(conditionLock->isHeldByCurrentThread());
+	ASSERT(conditonLock->isHeldByCurrentThread());
+
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	
-	Semaphore *waiter;
-	while (!queue->IsEmpty())
+	Thread *thread;
+	while (numWaiting > 0)
 	{
-		waiter = (Semaphore *) queue->Remove();
-		if(NULL != waiter)
+		thread = (Thread *) queue.Remove();
+
+		if (NULL != thread)
 		{
-			waiter->V();
+			numWaiting--;
+			scheduler->ReadyToRun(thread);
 		}
 	}
 }
