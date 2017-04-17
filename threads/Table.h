@@ -26,11 +26,12 @@ files, etc.
 
 */
 
+#include "synch.h"
 
 class Table {
    public:
      // create a table to hold at most 'size' entries.
-     Table(size);
+     Table(char *name, int size);
    
      // allocate a table slot for 'object'.
      // return the table index for the slot or -1 on error.
@@ -45,5 +46,10 @@ class Table {
      void Release(int index);
    private:
      // Your code here.
+	 int m_maxSize;
+	 Lock *m_lock;
+	 void **m_entries;
+	 char *m_debugName;
+	 int m_usedSize;
 };
 
