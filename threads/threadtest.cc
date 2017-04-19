@@ -72,10 +72,11 @@ SimpleThread3(int which)
 	if(list->IsEmpty()){
 		GenerateNItems(1, list);
 	}
-	
+	lock->Acquire();
 		currentThread->Yield();
 	RemoveNItems(1, list);
 	currentThread->Yield();
+	lock->Release();
 }
 
 void

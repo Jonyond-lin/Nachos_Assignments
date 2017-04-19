@@ -1,6 +1,8 @@
 #include "dllist.h"
 #include "system.h"
 #include "dllist.h"
+#include "synch.h"
+Lock *lock3;
 
 extern int testnum;
 DLList::DLList()
@@ -53,6 +55,7 @@ void DLList::Append(void * item)
 
 void * DLList::Remove(int * keyPtr)
 {
+	lock3 = new Lock("dllist lock");
 	if (first == (DLLElement *)NULL)
 	{
 		return (DLLElement *)NULL;
@@ -63,6 +66,7 @@ void * DLList::Remove(int * keyPtr)
 		void *item;
 		if(3 == testnum)
 		{
+			lock3->Acquire();
 			currentThread->Yield();
 		}
 
@@ -82,6 +86,7 @@ void * DLList::Remove(int * keyPtr)
 		if(3 == testnum)
 		{
 			currentThread->Yield();
+			lock3->Release();
 		}
 		return item;
 	}
