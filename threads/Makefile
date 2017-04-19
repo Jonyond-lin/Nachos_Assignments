@@ -350,7 +350,7 @@ dllist.o: ../threads/dllist.cc ../threads/dllist.h ../threads/system.h \
   /usr/include/string.h /usr/include/xlocale.h ../threads/thread.h \
   ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
   ../threads/list.h ../machine/stats.h ../machine/timer.h \
-  ../threads/utility.h
+  ../threads/utility.h ../threads/synch.h
 dllist-driver.o: ../threads/dllist-driver.cc ../threads/dllist.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/iostream \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/x86_64-redhat-linux/bits/c++config.h \

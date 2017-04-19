@@ -3,7 +3,7 @@
 #include "dllist.h"
 #include "synch.h"
 Lock *lock3;
-
+Lock *lock4;
 extern int testnum;
 DLList::DLList()
 {
@@ -106,7 +106,8 @@ void DLList::SortedInsert(void * item, int sortKey)
 	// Note that after invoking Prepend or Append, the list
 	// is sorted as a ascending order.
 	DLLElement *t = new DLLElement(item, sortKey);
-
+	lock4 = new Lock("dllist lock");
+	lock4->Acquire();
 	if (IsEmpty())
 	{
 		if(testnum == 4) {
@@ -160,6 +161,7 @@ void DLList::SortedInsert(void * item, int sortKey)
 	{
 		min_key = sortKey;
 	}
+	lock4->Release();
 
 	length++;
 }

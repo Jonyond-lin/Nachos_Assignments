@@ -93,7 +93,9 @@ synch.o: ../threads/synch.cc ../threads/copyright.h ../threads/synch.h \
   ../threads/list.h ../threads/system.h ../threads/scheduler.h \
   ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
   ../machine/timer.h ../filesys/filesys.h ../filesys/synchdisk.h \
-  ../machine/disk.h ../threads/synch.h
+  ../machine/disk.h ../threads/synch.h \
+  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cstring \
+  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cstddef
 synchlist.o: ../threads/synchlist.cc ../threads/copyright.h \
   ../threads/synchlist.h ../threads/list.h ../threads/utility.h \
   ../threads/bool.h ../machine/sysdep.h ../threads/copyright.h \
@@ -181,7 +183,8 @@ threadtest.o: ../threads/threadtest.cc ../threads/copyright.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/x86_64-redhat-linux/bits/c++config.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/x86_64-redhat-linux/bits/os_defines.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/x86_64-redhat-linux/bits/cpu_defines.h \
-  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cstddef
+  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cstddef \
+  ../threads/synch.h
 interrupt.o: ../machine/interrupt.cc ../threads/copyright.h \
   ../machine/interrupt.h ../threads/list.h ../threads/copyright.h \
   ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
@@ -401,7 +404,7 @@ dllist.o: ../threads/dllist.cc ../threads/dllist.h ../threads/system.h \
   ../threads/utility.h ../threads/scheduler.h ../threads/list.h \
   ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
   ../machine/timer.h ../filesys/filesys.h ../filesys/synchdisk.h \
-  ../machine/disk.h ../threads/synch.h
+  ../machine/disk.h ../threads/synch.h ../threads/synch.h
 dllist-driver.o: ../threads/dllist-driver.cc ../threads/dllist.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/iostream \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/x86_64-redhat-linux/bits/c++config.h \
@@ -509,6 +512,38 @@ dllist-driver.o: ../threads/dllist-driver.cc ../threads/dllist.h \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/typeinfo \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/istream \
   /usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/bits/istream.tcc
+BoundedBuffer.o: ../threads/BoundedBuffer.cc ../threads/BoundedBuffer.h \
+  ../threads/synch.h ../threads/copyright.h ../threads/thread.h \
+  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
+  ../threads/copyright.h /usr/include/stdio.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+  /usr/include/bits/wchar.h /usr/include/gconv.h ../threads/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/string.h /usr/include/xlocale.h ../machine/machine.h \
+  ../threads/utility.h ../machine/translate.h ../machine/disk.h \
+  ../userprog/addrspace.h ../threads/copyright.h ../filesys/filesys.h \
+  ../threads/copyright.h ../filesys/openfile.h ../threads/utility.h \
+  ../threads/list.h
+Table.o: ../threads/Table.cc ../threads/Table.h ../threads/synch.h \
+  ../threads/copyright.h ../threads/thread.h ../threads/utility.h \
+  ../threads/bool.h ../machine/sysdep.h ../threads/copyright.h \
+  /usr/include/stdio.h /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+  /usr/include/gnu/stubs-32.h \
+  /usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+  /usr/include/bits/wchar.h /usr/include/gconv.h ../threads/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/string.h /usr/include/xlocale.h ../machine/machine.h \
+  ../threads/utility.h ../machine/translate.h ../machine/disk.h \
+  ../userprog/addrspace.h ../threads/copyright.h ../filesys/filesys.h \
+  ../threads/copyright.h ../filesys/openfile.h ../threads/utility.h \
+  ../threads/list.h
 addrspace.o: ../userprog/addrspace.cc ../threads/copyright.h \
   ../threads/system.h ../threads/copyright.h ../threads/utility.h \
   ../threads/bool.h ../machine/sysdep.h ../threads/copyright.h \
