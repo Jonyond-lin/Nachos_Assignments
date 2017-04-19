@@ -48,6 +48,7 @@ SimpleThread1(int which)
 }
 void SimpleThread2(int which)
 {
+	lock->Acquire();
 	GenerateNItems(3,list);
 	currentThread->Yield();
 	
@@ -58,6 +59,7 @@ void SimpleThread2(int which)
 	currentThread->Yield();
 
 	MergeNItems(list);//print result
+	lock->Release();
 }
 
 //----------------------------------------------------------------------

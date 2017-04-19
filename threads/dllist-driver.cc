@@ -73,12 +73,12 @@ void MergeNItems(DLList *list){
 	int a = pp->key;
 	pp = pp->next;
 	if(pp == NULL)
-		cout<<"The result is:"<<a<<endl;
+		cout<<"The sum of three numbers is:"<<a<<endl;
 	else	
 	{
 		int b = pp->key;
 		pp->key += a;
-		cout<<"result:"<<a<<"+"<<b<<"="<<pp->key<<endl;
+		cout<<"Processes:"<<a<<"+"<<b<<"="<<pp->key<<endl;
 	}
-	RemoveNItems(1,list);
+	list->first = pp;
 }
