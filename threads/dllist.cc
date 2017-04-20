@@ -73,7 +73,7 @@ void * DLList::Remove(int * keyPtr)
 		if(first->next == NULL)
 		{
 			item = first->item;
-			//delete first;
+			delete first;
 			first = (DLLElement *)NULL;
 			length--;
 			return item;
