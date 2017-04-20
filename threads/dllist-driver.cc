@@ -37,6 +37,9 @@ void GenerateNItems(int N, DLList *list)
 			keyTemp = random(1, N * 2);
 		}
 		list->SortedInsert((DLLElement *)NULL, keyTemp);
+		//list->ShowList();
+		//if(list->IsEmpty()) printf("EMPTY!");
+		//else printf("NO EMPTY!");
 		cout << "The item with key " << keyTemp << " has been inserted into the list." << endl;
 	}
 }
@@ -59,6 +62,9 @@ void RemoveNItems(int N, DLList *list)
 		}
 		
 		list->Remove(&keyTemp);
+		//list->ShowList();
+		// if(list->IsEmpty()) printf("EMPTY!");
+		//else printf("NO EMPTY!");
 		cout << "The item with key:" << keyTemp << " has been removed!" << endl;
 	}
 }

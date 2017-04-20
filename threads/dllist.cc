@@ -73,7 +73,8 @@ void * DLList::Remove(int * keyPtr)
 		if(first->next == NULL)
 		{
 			item = first->item;
-			delete first;
+			//delete first;
+			first = (DLLElement *)NULL;
 			length--;
 			return item;
 		}
@@ -91,7 +92,20 @@ void * DLList::Remove(int * keyPtr)
 		return item;
 	}
 }
-
+void DLList::ShowList()
+{
+	if (first == (DLLElement *)NULL) {
+		printf("EMPTY!");
+	} else {
+		DLLElement *t;
+		t = first;
+		while (t->next != NULL) {
+			printf("%d,", t->key);
+			t = t->next;
+		}
+		printf("%d\n", t->key);
+	}
+}
 bool DLList::IsEmpty()
 {
 	if (first == (DLLElement *)NULL)
@@ -107,7 +121,7 @@ void DLList::SortedInsert(void * item, int sortKey)
 	// is sorted as a ascending order.
 	DLLElement *t = new DLLElement(item, sortKey);
 	lock4 = new Lock("dllist lock");
-	lock4->Acquire();
+	if(testnum == 4) lock4->Acquire();
 	if (IsEmpty())
 	{
 		if(testnum == 4) {
@@ -161,7 +175,7 @@ void DLList::SortedInsert(void * item, int sortKey)
 	{
 		min_key = sortKey;
 	}
-	lock4->Release();
+	if(testnum == 4) lock4->Release();
 
 	length++;
 }
