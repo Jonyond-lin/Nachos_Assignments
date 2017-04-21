@@ -2,7 +2,7 @@
 #include "utility.h"
 #include "string.h"
 
-#define REMAINING_SIZE (m_maxSize - m_usedSize)
+// #define REMAINING_SIZE (m_maxSize - m_usedSize)
 
 BoundedBuffer::BoundedBuffer(char *name, int maxsize):debugName(name), m_maxSize(maxsize), m_usedSize(0)
 {
@@ -36,7 +36,10 @@ void BoundedBuffer::Read(void *data, int size)
 	if (size > m_usedSize)
 	{
 		DEBUG('b', "The size of the data to be read (%d byte) is larger than the data size in the buffer (%d byte).\n", size, m_usedSize);
-		size = REMAINING_SIZE;
+		if(size < m_maxSize)
+			m_notEmpty->Wait(m_lock);
+		else
+			size = m_maxSize - m_usedSize;
 	}
 	memcpy(data, (char *) m_buffer + (m_usedSize - size), size);
 	DEBUG('b', "Move the last %d byte data from the buffer %x to %x.\n", size, m_buffer, data);
@@ -57,10 +60,11 @@ void BoundedBuffer::Write(void *data, int size)
 	{
 		m_notFull->Wait(m_lock);
 	}
-	if(size > REMAINING_SIZE)
+	int remain = m_maxSize - m_usedSize;
+	if(size > remain)
 	{
-		DEBUG('b', "The size of the data to be written (%d byte) is larger than the size of the remaining data in the buffer (% byte).\n", size, REMAINING_SIZE);
-		size = REMAINING_SIZE;
+		//DEBUG('b', "The size of the data to be written (%d byte) is larger than the size of the remaining data in the buffer (% byte).\n", size, REMAINING_SIZE);
+		size = remain;
 	}
 	memcpy((char *) m_buffer + m_usedSize, data, size);
 	DEBUG('b', "Move %d bytes data from %x to the buffer %x.\n", size, data, m_buffer);

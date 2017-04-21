@@ -14,12 +14,16 @@
 #include "dllist.h"
 #include <cstdio>
 #include "synch.h"
+#include "Table.h"
+#include "BoundedBuffer.h"
 using namespace std;
 
 // testnum is set in main.cc
 int testnum = 1;
 DLList *list;
 Lock *lock;
+Table *table;
+BoundedBuffer *buffer;
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -80,6 +84,48 @@ SimpleThread3(int which)
 	lock->Release();
 }
 
+void ThreadTestTable(int which)
+{
+	int user[3],i;
+	for(i=0;i<3;i++)
+	{
+		void *obj = (void *)((i+2)*(which + 3) + 1 );
+		user[i]=table->Alloc(obj);
+		printf("Thread %d save %d in table[%d]\n",which,(int)obj,user[i]);
+		currentThread->Yield();
+	}
+	for(i=0;i<3;i++)
+	{	
+		printf("Thread %d:table[%d] = %d\n",which,user[i],(int)table->Get(user[i]));
+	}
+	currentThread->Yield();
+	for(i=0;i<3;i++){
+		table->Release(user[i]);
+		currentThread->Yield();
+	}
+}
+
+void ThreadTestBuffer(int which){
+	char c[2] = "A";
+	int i;
+	for(i=0;i<20;i++){
+		buffer->Write(c,1);
+		printf("Producer:write %s\n",c);
+		c[0]++;
+	}
+}
+
+void BoundedBufferTest(){
+	Thread *t = new Thread("forked thread");
+	t->Fork(ThreadTestBuffer,1);
+
+	for(int i=0;i<10;i++){
+                char buf[3] = {0};
+                buffer->Read(buf,2);         
+	        printf("Consumer:read %s\n",buf);
+        }
+}
+
 void
 ThreadTest1(void (*p)(int))
 {
@@ -101,6 +147,8 @@ ThreadTest()
 {
 	lock = new Lock("dllist lock");
 	list = new DLList();
+	table = new Table("t1",10);
+	buffer = new BoundedBuffer("b1",5);
     switch (testnum) {
     case 1:
 	ThreadTest1(SimpleThread1);
@@ -113,6 +161,12 @@ ThreadTest()
 	break;
     case 4:
 	ThreadTest1(SimpleThread1);
+	break;
+    case 5:
+	ThreadTest1(ThreadTestTable);
+	break;
+    case 6:
+	BoundedBufferTest();
 	break;
     default:
 	printf("No test specified.\n");

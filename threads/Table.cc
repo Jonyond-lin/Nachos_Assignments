@@ -26,7 +26,8 @@ int Table::Alloc(void *object)
 	}
 	*(m_entries + loc) = object;
 	m_lock->Release();
-	return m_usedSize++;
+	m_usedSize++;
+	return loc;
 }
 
 void *Table::Get(int index)
