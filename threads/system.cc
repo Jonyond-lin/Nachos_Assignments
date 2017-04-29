@@ -42,6 +42,7 @@ extern void Cleanup();
 
 //----------------------------------------------------------------------
 // TimerInterruptHandler
+//
 // 	Interrupt handler for the timer device.  The timer device is
 //	set up to interrupt the CPU periodically (once every TimerTicks).
 //	This routine is called each time there is a timer interrupt,
