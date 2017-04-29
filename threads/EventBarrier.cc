@@ -11,6 +11,12 @@ EventBarrier::EventBarrier(const char *debugName):
 	m_completed = new Condition("all threads completed conditon");
 }
 
+EventBarrier::~EventBarrier()
+{
+	delete m_lock;
+	delete m_unfinished;
+	delete m_completed;
+}
 void EventBarrier::Wait()
 {
 	DEBUG('3', "Thread [%s] wants to become a waiter.\n", currentThread->getName());
