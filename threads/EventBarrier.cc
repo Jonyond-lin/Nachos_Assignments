@@ -26,3 +26,33 @@ void EventBarrier::Wait()
 	m_lock->Release();
 
 }
+
+void EventBarrier::Signal()
+{
+	DEBUG('3', "Thread [%s] has finished the event and launches a signal.\n", currentThread->getName());
+	m_lock->Acquire();
+	m_status = SIGNALED;
+	m_unfinished->Broadcast(m_lock);
+	m_completed->Wait(m_lock);
+	m_status = UNSIGNALED;
+	m_lock->Release();
+	DEBUG('3', "Thread [%s] has done the signal process.\n", currentThread->getName());
+}
+
+void EventBuffer::Complete()
+{
+	DEBUG('3', "Thread [%s] invokes the EventBarrier::Complete() function.\n", currentThread->getName());
+	m_lock->Acquire();
+	if(1 != m_waiterNum) // The last waiter
+	{
+		waiterNum--;
+		m_completed->Broadcast(m_lock);
+		DEBUG('3', "All of the waiter threads have done their work.\n");
+	}
+	else
+	{
+		waiterNum--;
+		m_completed->Wait(m_lock);
+	}
+	m_lock->Release();
+}
