@@ -29,7 +29,7 @@ class EventBarrier
 public:
 	EventBarrier(const char *debugName);
 	~EventBarrier();
-	char *getName() { return m_name; }
+	const char *getName() { return m_name; }
 
 	void Wait(); // Wait until the event is signaled. 
 	// Return immediately if already in the signaled state.

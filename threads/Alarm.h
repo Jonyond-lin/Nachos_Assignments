@@ -1,11 +1,10 @@
 #ifndef ALARM_H
 #define ALARM_H
-class Alarm
+
+static class Alarm
 {
 public:
-	Alarm(char *debugName);
-	~Alarm();
-	char *getName() { return m_name; }
-	void Pause(int howLong);
+	static void Pause(int howLong);
 }
+
 #endif
