@@ -95,6 +95,7 @@ Thread::Fork(VoidFunctionPtr func, int arg)
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
     scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts 
 					// are disabled!
+	status = READY;
     (void) interrupt->SetLevel(oldLevel);
 }    
 
@@ -184,6 +185,7 @@ Thread::Yield ()
     nextThread = scheduler->FindNextToRun();
     if (nextThread != NULL) {
 	scheduler->ReadyToRun(this);
+	status = READY;
 	scheduler->Run(nextThread);
     }
     (void) interrupt->SetLevel(oldLevel);
