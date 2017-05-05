@@ -41,10 +41,8 @@ SimpleThread1(int which)
 	lock->Acquire();
 	// printf("Thread %d\n", which);
 	GenerateNItems(5, list);
-	currentThread->Yield();
 	// printf("Thread %d\n", which);
 	RemoveNItems(2, list);
-	currentThread->Yield();
 	// printf("Thread %d\n", which);
 	RemoveNItems(3, list);
 	lock->Release();
