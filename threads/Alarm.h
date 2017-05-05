@@ -18,6 +18,6 @@ private:
 	char *m_name;
 	Thread *m_stopWatchThread;
 	bool m_isRunning;
-}
+};
 
 #endif
