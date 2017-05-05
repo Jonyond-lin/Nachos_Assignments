@@ -31,5 +31,6 @@ class Scheduler {
   private:
     List *readyList;  		// queue of threads that are ready to run,
 				// but not running
+
 };
 #endif // SCHEDULER_H
