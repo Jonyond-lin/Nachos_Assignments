@@ -51,7 +51,8 @@ void Alarm::Pause(int howLong)
 	IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	if (JUST_CREATED != m_stopWatchThread->getStatus())
 	{
-		m_stopWatchThread->Fork(this->StopWatch, 7);
+		VoidFunctionPtr t = &this->StopWatch;
+		m_stopWatchThread->Fork(t, 7);
 	}
 	else
 	{
