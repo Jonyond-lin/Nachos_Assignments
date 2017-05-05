@@ -30,7 +30,7 @@ void StopWatch(int which)
 		if (alarm->m_sleepList->IsEmpty())
 		{
 			alarm->m_lock->Release();
-			break;
+			continue;
 		}
 		int t = alarm->m_sleepList->FirstKey();
 		if (t >= stats->totalTicks) // time's up
@@ -52,12 +52,13 @@ void Alarm::Pause(int howLong)
 	IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	if (!m_isRunning)
 	{
-		// VoidFunctionPtr t = StopWatch;
 		m_stopWatchThread->Fork(StopWatch, 7);
+		m_sleepList->SortedInsert((void *)currentThread, howLong * TimerTicks);
+		m_isRunning = true;
 	}
 	else
 	{
-
+		m_sleepList->SortedInsert((void *)currentThread, howLong * TimerTicks);
 	}
 
 	interrupt->SetLevel(oldLevel);
