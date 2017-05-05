@@ -7,7 +7,7 @@
 
 #include "Alarm.h"
 #include "system.h"
-
+Alarm *alarm;
 Alarm::Alarm(char *debugName): m_isRunning(false)
 {
 	m_sleepList = new List;
@@ -19,25 +19,25 @@ Alarm::~Alarm()
 	delete m_sleepList;
 	delete m_lock;
 }
-void Alarm::StopWatch(int which)
+void StopWatch(int which)
 {
 
 	DEBUG('3', "StopWatch is now running.\n");
 	while (true)
 	{
-		m_lock->Acquire();
-		if (m_sleepList->IsEmpty())
+		alarm->m_lock->Acquire();
+		if (alarm->m_sleepList->IsEmpty())
 		{
-			m_lock->Release();
+			alarm->m_lock->Release();
 			break;
 		}
-		int t = m_sleepList->FirstKey();
+		int t = alarm->m_sleepList->FirstKey();
 		if (t >= stats->totalTicks) // time's up
 		{
-			Thread *t = (Thread *)m_sleepList->Remove();
+			Thread *t = (Thread *)alarm->m_sleepList->Remove();
 			scheduler->ReadyToRun(t);
 		}
-		m_lock->Release();
+		alarm->m_lock->Release();
 	}
 	DEBUG('3', "StopWatch is now stop.\n");
 }
@@ -51,8 +51,8 @@ void Alarm::Pause(int howLong)
 	IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	if (JUST_CREATED != m_stopWatchThread->getStatus())
 	{
-		VoidFunctionPtr t = &this->StopWatch;
-		m_stopWatchThread->Fork(t, 7);
+		// VoidFunctionPtr t = StopWatch;
+		m_stopWatchThread->Fork(StopWatch, 7);
 	}
 	else
 	{

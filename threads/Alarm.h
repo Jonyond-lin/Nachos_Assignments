@@ -8,10 +8,10 @@ class Alarm
 {
 public:
 	Alarm(char *debugName);
-	void ~Alarm();
+	~Alarm();
 	char *getName() { return m_name; }
 	void Pause(int howLong);
-	void StopWatch(int which);
+	friend void StopWatch(int which);
 private:
 	List *m_sleepList;
 	Lock *m_lock;
