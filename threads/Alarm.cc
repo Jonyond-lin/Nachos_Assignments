@@ -13,6 +13,7 @@ Alarm::Alarm(char *debugName): m_isRunning(false)
 	m_sleepList = new List;
 	m_lock = new Lock("alarm lock");
 	m_stopWatchThread = new Thread("stopwatch thread");
+	alarm = this;
 }
 Alarm::~Alarm()
 {
