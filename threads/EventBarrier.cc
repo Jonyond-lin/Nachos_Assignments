@@ -45,19 +45,19 @@ void EventBarrier::Signal()
 	DEBUG('3', "Thread [%s] has done the signal process.\n", currentThread->getName());
 }
 
-void EventBuffer::Complete()
+void EventBarrier::Complete()
 {
 	DEBUG('3', "Thread [%s] invokes the EventBarrier::Complete() function.\n", currentThread->getName());
 	m_lock->Acquire();
 	if(1 != m_waiterNum) // The last waiter
 	{
-		waiterNum--;
+		m_waiterNum--;
 		m_completed->Broadcast(m_lock);
 		DEBUG('3', "All of the waiter threads have done their work.\n");
 	}
 	else
 	{
-		waiterNum--;
+		m_waiterNum--;
 		m_completed->Wait(m_lock);
 	}
 	m_lock->Release();
