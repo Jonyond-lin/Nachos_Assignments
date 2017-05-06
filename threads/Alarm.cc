@@ -67,8 +67,9 @@ void Alarm::Pause(int howLong)
 		m_sleepList->SortedInsert((void *)currentThread, stats->totalTicks + howLong * TimerTicks);
 	}
 	DEBUG(YELLOW, '3', "thread %s will keep pausing until reaching tick %d.\n", currentThread->getName(), stats->totalTicks + howLong * TimerTicks);
-	interrupt->SetLevel(oldLevel);
 	currentThread->Sleep();
+	interrupt->SetLevel(oldLevel);
+	
 	
 }
 
