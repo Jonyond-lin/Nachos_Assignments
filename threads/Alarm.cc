@@ -7,6 +7,9 @@
 
 #include "Alarm.h"
 #include "system.h"
+
+#define GET_STR_OF_BOOL(b) (b ? "TRUE" : "FALSE")
+
 Alarm *alarm;
 Alarm::Alarm(char *debugName): m_isRunning(false)
 {
@@ -36,9 +39,11 @@ void StopWatch(int which)
 			interrupt->SetLevel(oldLevel);
 			continue;
 		}
+		DEBUG(YELLOW, "m_shouldStop is $s.\n", GET_STR_OF_BOOL(alarm->m_shouldStop));
 		if (alarm->m_shouldStop)
 		{
 			DEBUG(YELLOW, '3', "Now the StopWatch should be stopped.\n");
+			alarm->m_isRunning = false;
 			// alarm->m_lock->Release();
 			interrupt->SetLevel(oldLevel);
 			break;
@@ -49,7 +54,7 @@ void StopWatch(int which)
 		if (stats->totalTicks >= t) // time's up
 		{
 			Thread *t = (Thread *)alarm->m_sleepList->Remove();
-			scheduler->ReadyToRun(t);
+			scheduler->ReadyToRun(t); 
 		}
 		// alarm->m_lock->Release();
 		interrupt->SetLevel(oldLevel);
@@ -83,6 +88,6 @@ void Alarm::Pause(int howLong)
 
 void Alarm::SetShouldStop(bool shouldStop)
 {
-	DEBUG(YELLOW, '3', "Set the m_shouldStop to true.");
+	DEBUG(YELLOW, '3', "Set the m_shouldStop to true.\n");
 	m_shouldStop = shouldStop;
 }
