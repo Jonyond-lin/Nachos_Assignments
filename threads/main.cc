@@ -66,7 +66,7 @@ extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
 void AlarmTest();
-Alarm *alarm;
+Alarm *g_alarm;
 //----------------------------------------------------------------------
 // main
 // 	Bootstrap the operating system kernel.  
@@ -104,7 +104,7 @@ main(int argc, char **argv)
       }
     }
 	hello();
-	alarm = new Alarm("test alarm");
+	g_alarm = new Alarm("test alarm");
     ThreadTest();
 	AlarmTest();
 #endif
@@ -177,7 +177,7 @@ main(int argc, char **argv)
 void Run(int which)
 {
 	DEBUG('3', "%d thread is running!\n");
-	alarm->Pause(which * 10);
+	g_alarm->Pause(which * 10);
 }
 void AlarmTest()
 {
