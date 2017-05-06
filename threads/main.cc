@@ -196,6 +196,9 @@ void AlarmTest()
 	}
 	// lock->Release();
 	// interrupt->SetLevel(oldLevel);
-	while (finishCounter != 3);
+	while (finishCounter != 3)
+	{
+		currentThread->Yield();
+	}
 	g_alarm->SetShouldStop(true);
 }
