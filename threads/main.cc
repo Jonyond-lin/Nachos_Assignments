@@ -53,6 +53,8 @@
 #include "utility.h"
 #include "system.h"
 #include "hello.h"
+#include "Alarm.h"
+#include "synch.h"
 #ifdef THREADS
 extern int testnum;
 #endif
@@ -63,7 +65,8 @@ extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
-
+void AlarmTest();
+Alarm *alarm;
 //----------------------------------------------------------------------
 // main
 // 	Bootstrap the operating system kernel.  
@@ -101,7 +104,9 @@ main(int argc, char **argv)
       }
     }
 	hello();
+	alarm = new Alarm("test alarm");
     ThreadTest();
+	AlarmTest();
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
@@ -168,4 +173,22 @@ main(int argc, char **argv)
 				// "main" thread is finished, preventing
 				// it from returning.
     return(0);			// Not reached...
+}
+void Run(int which)
+{
+	DEBUG('3', "%d thread is running!\n");
+	alarm->Pause(which * 10);
+}
+void AlarmTest()
+{
+	Thread *t[3] = {new Thread("alarm test thread 1"), \
+		new Thread("alarm test thread 2"), \
+		new Thread("alarm test thread 3") };
+	Lock *lock = new Lock("alarm test lock");
+	lock->Acquire();
+	for (int i = 0; i < 3; i++)
+	{
+		t[i]->Fork(Run, i);
+	}
+	lock->Release();
 }
