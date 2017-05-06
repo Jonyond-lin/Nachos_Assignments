@@ -91,5 +91,6 @@ DEBUG(COLOR color, char flag, char *format, ...)
 		vfprintf(stdout, format, ap);
 		va_end(ap);
 		fflush(stdout);
+		delete t;
 	}
 }
