@@ -177,7 +177,7 @@ main(int argc, char **argv)
 }
 void Run(int which)
 {
-	DEBUG('3', "%d thread is running!\n");
+	DEBUG(GREEN, '3', "%d thread is running!\n");
 	g_alarm->Pause(which * 10);
 	finishCounter++;
 }
