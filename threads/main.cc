@@ -188,12 +188,14 @@ void AlarmTest()
 		new Thread("alarm test thread 2"), \
 		new Thread("alarm test thread 3") };
 	Lock *lock = new Lock("alarm test lock");
-	lock->Acquire();
+	// lock->Acquire();
+	IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	for (int i = 0; i < 3; i++)
 	{
 		t[i]->Fork(Run, i);
 	}
-	lock->Release();
+	// lock->Release();
+	interrupt->SetLevel(oldLevel);
 	while (finishCounter != 3);
 	g_alarm->SetShouldStop(true);
 }
