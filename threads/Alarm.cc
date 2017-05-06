@@ -83,5 +83,6 @@ void Alarm::Pause(int howLong)
 
 void Alarm::SetShouldStop(bool shouldStop)
 {
+	DEBUG(YELLOW, '3', "Set the m_shouldStop to true.");
 	m_shouldStop = shouldStop;
 }
