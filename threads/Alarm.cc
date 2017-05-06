@@ -45,8 +45,8 @@ void StopWatch(int which)
 		}
 
 		int t = alarm->m_sleepList->FirstKey();
-		DEBUG(YELLOW, '3', "The first key is %d and current tick is %d", t, stats->totalTicks);
-		if (t >= stats->totalTicks) // time's up
+		DEBUG(YELLOW, '3', "The first key is %d and current tick is %d.\n", t, stats->totalTicks);
+		if (stats->totalTicks >= t) // time's up
 		{
 			Thread *t = (Thread *)alarm->m_sleepList->Remove();
 			scheduler->ReadyToRun(t);
