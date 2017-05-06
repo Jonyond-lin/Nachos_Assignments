@@ -26,20 +26,24 @@ void StopWatch(int which)
 	DEBUG(YELLOW, '3', "StopWatch is now running.\n");
 	while (true)
 	{
-		alarm->m_lock->Acquire();
+		// alarm->m_lock->Acquire();
+		IntStatus oldLevel = interrupt->SetLevel(IntOff);
 		DEBUG(YELLOW, '3', "StopWatch is now running at %d ticks.\n", stats->totalTicks);
 		if (alarm->m_sleepList->IsEmpty())
 		{
 			DEBUG(YELLOW, '3', "The sleepList is currently empty!\n");
-			alarm->m_lock->Release();
+			//alarm->m_lock->Release();
+			interrupt->SetLevel(oldLevel);
 			continue;
 		}
 		if (alarm->m_shouldStop)
 		{
 			DEBUG(YELLOW, '3', "Now the StopWatch should be stopped.\n");
-			alarm->m_lock->Release();
+			// alarm->m_lock->Release();
+			interrupt->SetLevel(oldLevel);
 			break;
 		}
+
 		int t = alarm->m_sleepList->FirstKey();
 		DEBUG(YELLOW, "The first key is %d", t);
 		if (t >= stats->totalTicks) // time's up
@@ -47,7 +51,8 @@ void StopWatch(int which)
 			Thread *t = (Thread *)alarm->m_sleepList->Remove();
 			scheduler->ReadyToRun(t);
 		}
-		alarm->m_lock->Release();
+		// alarm->m_lock->Release();
+		interrupt->SetLevel(oldLevel);
 	}
 	DEBUG(YELLOW, '3', "StopWatch is now stop.\n");
 }
