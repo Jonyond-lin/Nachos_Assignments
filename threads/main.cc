@@ -200,5 +200,6 @@ void AlarmTest()
 	{
 		currentThread->Yield();
 	}
+	DEBUG(RED, '3', "All of the forked thread are finished.");
 	g_alarm->SetShouldStop(true);
 }
