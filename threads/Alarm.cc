@@ -32,13 +32,6 @@ void StopWatch(int which)
 		// alarm->m_lock->Acquire();
 		IntStatus oldLevel = interrupt->SetLevel(IntOff);
 		DEBUG(YELLOW, '3', "StopWatch is now running at %d ticks.\n", stats->totalTicks);
-		if (alarm->m_sleepList->IsEmpty())
-		{
-			DEBUG(YELLOW, '3', "The sleepList is currently empty!\n");
-			//alarm->m_lock->Release();
-			interrupt->SetLevel(oldLevel);
-			continue;
-		}
 		DEBUG(YELLOW, "m_shouldStop is $s.\n", GET_STR_OF_BOOL(alarm->m_shouldStop));
 		if (alarm->m_shouldStop)
 		{
@@ -48,6 +41,14 @@ void StopWatch(int which)
 			interrupt->SetLevel(oldLevel);
 			break;
 		}
+		if (alarm->m_sleepList->IsEmpty())
+		{
+			DEBUG(YELLOW, '3', "The sleepList is currently empty!\n");
+			//alarm->m_lock->Release();
+			interrupt->SetLevel(oldLevel);
+			continue;
+		}
+		
 
 		int t = alarm->m_sleepList->FirstKey();
 		DEBUG(YELLOW, '3', "The first key is %d and current tick is %d.\n", t, stats->totalTicks);
