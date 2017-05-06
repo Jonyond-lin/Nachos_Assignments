@@ -106,7 +106,7 @@ main(int argc, char **argv)
     }
 	hello();
 	g_alarm = new Alarm("test alarm");
-    ThreadTest();
+    // ThreadTest();
 	AlarmTest();
 #endif
 
