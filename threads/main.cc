@@ -192,7 +192,7 @@ void AlarmTest()
 	// IntStatus oldLevel = interrupt->SetLevel(IntOff);
 	for (int i = 0; i < 3; i++)
 	{
-		t[i]->Fork(Run, i);
+		t[i]->Fork(Run, i+1);
 	}
 	// lock->Release();
 	// interrupt->SetLevel(oldLevel);
