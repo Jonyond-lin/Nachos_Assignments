@@ -39,6 +39,7 @@ void StopWatch(int which)
 			break;
 		}
 		int t = alarm->m_sleepList->FirstKey();
+		DEBUG(YELLOW, "The first key is %d", t);
 		if (t >= stats->totalTicks) // time's up
 		{
 			Thread *t = (Thread *)alarm->m_sleepList->Remove();
