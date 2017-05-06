@@ -115,13 +115,13 @@ Lock::~Lock()
 }
 void Lock::Acquire() 
 {
-	DEBUG('l', "%s thread is acquiring a lock.\n", currentThread->getName());
+	DEBUG(RED, 'l', "%s thread is acquiring a lock.\n", currentThread->getName());
 	semaphore->P();
 	holdingThread = currentThread;
 }
 void Lock::Release() 
 {
-	DEBUG('l', "%s thread is releasing the lock.\n", currentThread->getName());
+	DEBUG(RED, 'l', "%s thread is releasing the lock.\n", currentThread->getName());
 	ASSERT(isHeldByCurrentThread());
 	semaphore->V();
 }
