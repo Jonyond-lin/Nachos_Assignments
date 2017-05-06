@@ -80,7 +80,8 @@ void
 DEBUG(COLOR color, char flag, char *format, ...)
 {
 	if (DebugIsEnabled(flag)) {
-		char *t = new char[strlen(format) + strlen(color_string[color] + strlen(color_string[NORMAL]) + 1)];
+		char *t = AllocBoundedArray(strlen(format) + \
+			strlen(color_string[color] + strlen(color_string[NORMAL]) + 1));
 		strcpy(t, color_string[color]);
 		strcat(t, format);
 		strcat(t, color_string[NORMAL]);
@@ -91,6 +92,7 @@ DEBUG(COLOR color, char flag, char *format, ...)
 		vfprintf(stdout, format, ap);
 		va_end(ap);
 		fflush(stdout);
-		delete[] t;
+		DeallocBoundedArray(t, strlen(format) + \
+			strlen(color_string[color] + strlen(color_string[NORMAL]) + 1));
 	}
 }
