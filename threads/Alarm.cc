@@ -69,3 +69,8 @@ void Alarm::Pause(int howLong)
 	currentThread->Sleep();
 	interrupt->SetLevel(oldLevel);
 }
+
+void Alarm::SetShouldStop(bool shouldStop)
+{
+	m_shouldStop = shouldStop;
+}

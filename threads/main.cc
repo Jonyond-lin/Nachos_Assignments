@@ -67,6 +67,7 @@ extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
 void AlarmTest();
 Alarm *g_alarm;
+int finishCounter = 0;
 //----------------------------------------------------------------------
 // main
 // 	Bootstrap the operating system kernel.  
@@ -178,6 +179,7 @@ void Run(int which)
 {
 	DEBUG('3', "%d thread is running!\n");
 	g_alarm->Pause(which * 10);
+	finishCounter++;
 }
 void AlarmTest()
 {
@@ -191,4 +193,6 @@ void AlarmTest()
 		t[i]->Fork(Run, i);
 	}
 	lock->Release();
+	while (finishCounter != 3);
+	g_alarm->SetShouldStop(true);
 }

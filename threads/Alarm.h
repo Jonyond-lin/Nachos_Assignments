@@ -12,6 +12,7 @@ public:
 	char *getName() { return m_name; }
 	void Pause(int howLong);
 	friend void StopWatch(int which);
+	void SetShouldStop(bool shouldStop);
 private:
 	List *m_sleepList;
 	Lock *m_lock;
