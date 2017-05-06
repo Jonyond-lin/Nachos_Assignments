@@ -17,7 +17,7 @@ private:
 	Lock *m_lock;
 	char *m_name;
 	Thread *m_stopWatchThread;
-	bool m_isRunning;
+	bool m_isRunning, m_shouldStop;
 };
 
 #endif

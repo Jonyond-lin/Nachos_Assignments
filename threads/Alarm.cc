@@ -32,6 +32,11 @@ void StopWatch(int which)
 			alarm->m_lock->Release();
 			continue;
 		}
+		if (alarm->m_shouldStop)
+		{
+			alarm->m_lock->Release();
+			break;
+		}
 		int t = alarm->m_sleepList->FirstKey();
 		if (t >= stats->totalTicks) // time's up
 		{
@@ -53,13 +58,14 @@ void Alarm::Pause(int howLong)
 	if (!m_isRunning)
 	{
 		m_stopWatchThread->Fork(StopWatch, 7);
-		m_sleepList->SortedInsert((void *)currentThread, howLong * TimerTicks);
+		m_sleepList->SortedInsert((void *)currentThread, stats->totalTicks + howLong * TimerTicks);
 		m_isRunning = true;
 	}
 	else
 	{
-		m_sleepList->SortedInsert((void *)currentThread, howLong * TimerTicks);
+		m_sleepList->SortedInsert((void *)currentThread, stats->totalTicks + howLong * TimerTicks);
 	}
-
+	DEBUG('3', "thread %s will keep pausing until reaching tick %d.\n", currentThread->getName(), stats->totalTicks + howLong * TimerTicks);
+	currentThread->Sleep();
 	interrupt->SetLevel(oldLevel);
 }
