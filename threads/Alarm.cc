@@ -23,10 +23,11 @@ Alarm::~Alarm()
 void StopWatch(int which)
 {
 
-	DEBUG('3', "StopWatch is now running.\n");
+	DEBUG(YELLOW, '3', "StopWatch is now running.\n");
 	while (true)
 	{
 		alarm->m_lock->Acquire();
+		DEBUG(YELLOW, '3', "StopWatch is now running.\n");
 		if (alarm->m_sleepList->IsEmpty())
 		{
 			alarm->m_lock->Release();
@@ -45,13 +46,13 @@ void StopWatch(int which)
 		}
 		alarm->m_lock->Release();
 	}
-	DEBUG('3', "StopWatch is now stop.\n");
+	DEBUG(YELLOW, '3', "StopWatch is now stop.\n");
 }
 void Alarm::Pause(int howLong)
 {
 	if (howLong <= 0)
 	{
-		DEBUG('3', "%s attempts to sleep zero time unit.\n", currentThread->getName());
+		DEBUG(YELLOW, '3', "%s attempts to sleep zero time unit.\n", currentThread->getName());
 		return;
 	}
 	IntStatus oldLevel = interrupt->SetLevel(IntOff);
@@ -65,7 +66,7 @@ void Alarm::Pause(int howLong)
 	{
 		m_sleepList->SortedInsert((void *)currentThread, stats->totalTicks + howLong * TimerTicks);
 	}
-	DEBUG('3', "thread %s will keep pausing until reaching tick %d.\n", currentThread->getName(), stats->totalTicks + howLong * TimerTicks);
+	DEBUG(YELLOW, '3', "thread %s will keep pausing until reaching tick %d.\n", currentThread->getName(), stats->totalTicks + howLong * TimerTicks);
 	currentThread->Sleep();
 	interrupt->SetLevel(oldLevel);
 }

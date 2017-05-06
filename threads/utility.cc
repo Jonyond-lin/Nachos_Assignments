@@ -9,6 +9,8 @@
 #include "copyright.h"
 #include "utility.h"
 
+char *color_string[6] = { "$(tput setaf 1)", "$(tput setaf 2)", \
+"$(tput setaf 3)", "$(tput setaf 4)", "$(tput bold)", "$(tput sgr0)" };
 // this seems to be dependent on how the compiler is configured.
 // if you have problems with va_start, try both of these alternatives
 #ifdef HOST_SNAKE
@@ -72,4 +74,22 @@ DEBUG(char flag, char *format, ...)
 	va_end(ap);
 	fflush(stdout);
     }
+}
+
+void
+DEBUG(COLOR color, char flag, char *format, ...)
+{
+	if (DebugIsEnabled(flag)) {
+		char *t = new char[strlen(format) + strlen(color_string[color] + strlen(color_string[NORMAL]))];
+		strcpy(t, color_string[color]);
+		strcat(t, format);
+		strcat(t, color_string[NORMAL]);
+		format = t;
+		va_list ap;
+		// You will get an unused variable message here -- ignore it.
+		va_start(ap, format);
+		vfprintf(stdout, format, ap);
+		va_end(ap);
+		fflush(stdout);
+	}
 }

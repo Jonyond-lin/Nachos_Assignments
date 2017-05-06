@@ -31,6 +31,10 @@
 					 	// Boolean values.  
 						// This is the same definition 
 						// as in the g++ library.
+enum COLOR
+{
+	RED, GREEN, YELLOW, BLUE, BOLD, NORMAL
+};
 
 #define min(a,b)  (((a) < (b)) ? (a) : (b))
 #define max(a,b)  (((a) > (b)) ? (a) : (b))
@@ -64,7 +68,8 @@ extern bool DebugIsEnabled(char flag); 	// Is this debug flag enabled?
 
 extern void DEBUG (char flag, char* format, ...);  	// Print debug message 
 							// if flag is enabled
-
+extern void DEBUG(COLOR color, char flag, char* format, ...); // Colored DEBUG
+							// Message
 //----------------------------------------------------------------------
 // ASSERT
 //      If condition is false,  print a message and dump core.
