@@ -9,8 +9,8 @@
 #include "copyright.h"
 #include "utility.h"
 
-char *color_string[6] = { "$(tput setaf 1)", "$(tput setaf 2)", \
-"$(tput setaf 3)", "$(tput setaf 4)", "$(tput bold)", "$(tput sgr0)" };
+char *color_string[6] = { "\033[0;32;31m", "\033[0;32;32m", \
+"\033[1;33m", "\033[0;32;34m", "\033[1m", "\033[0m" };
 // this seems to be dependent on how the compiler is configured.
 // if you have problems with va_start, try both of these alternatives
 #ifdef HOST_SNAKE
