@@ -30,11 +30,13 @@ void StopWatch(int which)
 		DEBUG(YELLOW, '3', "StopWatch is now running at %d ticks.\n", stats->totalTicks);
 		if (alarm->m_sleepList->IsEmpty())
 		{
+			DEBUG(YELLOW, '3', "The sleepList is currently empty!\n");
 			alarm->m_lock->Release();
 			continue;
 		}
 		if (alarm->m_shouldStop)
 		{
+			DEBUG(YELLOW, '3', "Now the StopWatch should be stopped.\n");
 			alarm->m_lock->Release();
 			break;
 		}
