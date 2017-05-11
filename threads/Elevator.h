@@ -13,14 +13,14 @@ class Elevator {
      char *getName() { return name; }
    
      // elevator control interface: called by Elevator thread
-     OpenDoors();                //   signal exiters and enterers to action
-     CloseDoors();               //   after exiters are out and enterers are in
-     VisitFloor(int floor);      //   go to a particular floor
+     void OpenDoors();                //   signal exiters and enterers to action
+     void CloseDoors();               //   after exiters are out and enterers are in
+     void VisitFloor(int floor);      //   go to a particular floor
    
      // elevator rider interface (part 1): called by rider threads.
-     Enter();                    //   get in
-     Exit();                     //   get out (iff destinationFloor)
-     RequestFloor(int floor);    //   tell the elevator our destinationFloor
+     void Enter();                    //   get in
+     void Exit();                     //   get out (iff destinationFloor)
+     void RequestFloor(int floor);    //   tell the elevator our destinationFloor
    
      // insert your methods here, if needed
 
@@ -41,8 +41,8 @@ class Building {
    
    				
      // elevator rider interface (part 2): called by rider threads
-     CallUp(int fromFloor);      //   signal an elevator we want to go up
-     CallDown(int fromFloor);    //   ... down
+     void CallUp(int fromFloor);      //   signal an elevator we want to go up
+     void CallDown(int fromFloor);    //   ... down
      Elevator *AwaitUp(int fromFloor); // wait for elevator arrival & going up
      Elevator *AwaitDown(int fromFloor); // ... down
    
