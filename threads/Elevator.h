@@ -10,7 +10,7 @@ class Elevator {
    public:
      Elevator(char *debugName, int numFloors, int myID);
      ~Elevator();
-     char *getName() { return name; }
+     char *getName() { return m_name; }
    
      // elevator control interface: called by Elevator thread
      void OpenDoors();                //   signal exiters and enterers to action
@@ -25,19 +25,20 @@ class Elevator {
      // insert your methods here, if needed
 
    private:
-     char *name;
+     char *m_name;
    
-     int currentfloor;           // floor where currently stopped
-     int occupancy;              // how many riders currently onboard
+     int m_currentFloor;           // floor where currently stopped
+     int m_occupancy;              // how many riders currently onboard
    
      // insert your data structures here, if needed
+	 int m_maxFloors;
 };
    
 class Building {
    public:
-     Building(char *debugname, int numFloors, int numElevators);
+     Building(char *debugName, int numFloors, int numElevators);
      ~Building();
-     char *getName() { return name; }
+     char *getName() { return m_name; }
    
    				
      // elevator rider interface (part 2): called by rider threads
@@ -47,9 +48,9 @@ class Building {
      Elevator *AwaitDown(int fromFloor); // ... down
    
    private:
-     char *name;
-     Elevator *elevator;         // the elevators in the building (array)
-   
+     char *m_name;
+     Elevator *m_elevator;         // the elevators in the building (array)
+	 int m_numFloors, m_numElevators;
      // insert your data structures here, if needed
 };
 

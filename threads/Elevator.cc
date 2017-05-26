@@ -1,6 +1,6 @@
 #include "Elevator.h"
-
-Elevator::Elevator(char *debugName, int numFloors, int myID)
+#include "system.h"
+Elevator::Elevator(char *debugName, int numFloors, int myID): m_name(debugName), m_maxFloors(numFloors), m_currentFloor(1), m_occupancy(0)
 {
 
 }
@@ -40,9 +40,10 @@ void Elevator::RequestFloor(int floor)
 
 }
 
-Building::Building(char *debugname, int numFloors, int numElevators)
+Building::Building(char *debugName, int numFloors, int numElevators): m_name(debugName), m_numFloors(numFloors), m_numElevators(numElevators)
 {
-
+	DEBUG(BLUE, '3', "A building is now being constructing!");
+	 
 }
 
 Building::~Building()
