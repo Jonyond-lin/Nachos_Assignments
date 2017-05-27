@@ -69,7 +69,7 @@ Building::~Building()
 
 void Building::CallUp(int fromFloor)
 {
-
+	//TODO: Simulate the press 
 }
 
 void Building::CallDown(int fromFloor)
