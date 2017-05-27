@@ -5,6 +5,7 @@ You should feel free to add to these classes, but do not change the
 existing interfaces.
 
 */
+#include "synch.h"
 
 class Elevator {
    public:
@@ -49,40 +50,42 @@ class Building {
    
    private:
      char *m_name;
-     Elevator *m_elevator;         // the elevators in the building (array)
+     Elevator **m_elevator;         // the elevators in the building (array)
 	 int m_numFloors, m_numElevators;
      // insert your data structures here, if needed
+	 Condition *m_noElevator;
+	 Lock *m_noElevatorLock;
 };
 
-   // here's a sample portion of a rider thread body showing how we
-   // expect things to be called.
-   //
-   // void rider(int id, int srcFloor, int dstFloor) {
-   //    Elevator *e;
-   //  
-   //    if (srcFloor == dstFloor)
-   //       return;
-   //  
-   //    DEBUG('t',"Rider %d travelling from %d to %d\n",id,srcFloor,dstFloor);
-   //    do {
-   //       if (srcFloor < dstFloor) {
-   //          DEBUG('t', "Rider %d CallUp(%d)\n", id, srcFloor);
-   //          building->CallUp(srcFloor);
-   //          DEBUG('t', "Rider %d AwaitUp(%d)\n", id, srcFloor);
-   //          e = building->AwaitUp(srcFloor);
-   //       } else {
-   //          DEBUG('t', "Rider %d CallDown(%d)\n", id, srcFloor);
-   //          building->CallDown(srcFloor);
-   //          DEBUG('t', "Rider %d AwaitDown(%d)\n", id, srcFloor);
-   //          e = building->AwaitDown(srcFloor);
-   //       }
-   //       DEBUG('t', "Rider %d Enter()\n", id);
-   //    } while (!e->Enter()); // elevator might be full!
-   //  
-   //    DEBUG('t', "Rider %d RequestFloor(%d)\n", id, dstFloor);
-   //    e->RequestFloor(dstFloor); // doesn't return until arrival
-   //    DEBUG('t', "Rider %d Exit()\n", id);
-   //    e->Exit();
-   //    DEBUG('t', "Rider %d finished\n", id);
-   // }
+    //here's a sample portion of a rider thread body showing how we
+    //expect things to be called.
+   
+    void rider(int id, int srcFloor, int dstFloor) {
+       Elevator *e;
+     
+       if (srcFloor == dstFloor)
+          return;
+     
+       DEBUG('t',"Rider %d travelling from %d to %d\n",id,srcFloor,dstFloor);
+       do {
+          if (srcFloor < dstFloor) {
+             DEBUG('t', "Rider %d CallUp(%d)\n", id, srcFloor);
+             building->CallUp(srcFloor);
+             DEBUG('t', "Rider %d AwaitUp(%d)\n", id, srcFloor);
+             e = building->AwaitUp(srcFloor);
+          } else {
+             DEBUG('t', "Rider %d CallDown(%d)\n", id, srcFloor);
+             building->CallDown(srcFloor);
+             DEBUG('t', "Rider %d AwaitDown(%d)\n", id, srcFloor);
+             e = building->AwaitDown(srcFloor);
+          }
+          DEBUG('t', "Rider %d Enter()\n", id);
+       } while (!e->Enter()); // elevator might be full!
+     
+       DEBUG('t', "Rider %d RequestFloor(%d)\n", id, dstFloor);
+       e->RequestFloor(dstFloor); // doesn't return until arrival
+       DEBUG('t', "Rider %d Exit()\n", id);
+       e->Exit();
+       DEBUG('t', "Rider %d finished\n", id);
+    }
 
