@@ -1,9 +1,9 @@
 #include "Elevator.h"
 #include "system.h"
 #include "utility.h"
-#include <sstream>
+#include "Alarm.h"
 extern Building *building;
-
+extern Alarm *g_alarm;
 Building::Building(char *debugname, int numFloors, int numElevators)
 {
 	name = debugname;
@@ -108,11 +108,11 @@ Elevator::Elevator(char *debugName, int numFloors, int myID) :
 	m_id = myID;
 	m_barrierIn = (EventBarrier **)AllocBoundedArray(sizeof(EventBarrier *) * numFloors);
 	for (int i = 0; i < numFloors; i++) {
-		m_barrierIn[i] = new EventBarrier();
+		m_barrierIn[i] = new EventBarrier("elevator in");
 	}
 	m_barrierOut = (EventBarrier **)AllocBoundedArray(sizeof(EventBarrier *) * numFloors);
 	for (int i = 0; i < numFloors; i++) {
-		m_barrierOut[i] = new EventBarrier();
+		m_barrierOut[i] = new EventBarrier("elevator out");
 	}
 	m_serCon = new Condition("service condition");
 	m_serConLock = new Lock("service condition lock");
@@ -161,7 +161,7 @@ void Elevator::VisitFloor(int floor)
 {
 	int sleepTime = floor > currentfloor ? (floor - currentfloor) : (currentfloor - floor);
 	DEBUG('e', "Elevator::VisitFloor: sleepTime = %d\n", sleepTime);
-	sysAlarm->Pause(sleepTime);
+	g_alarm->Pause(sleepTime);
 	currentfloor = floor;
 	printf("%s visit floor %d.\n", name, floor);
 
