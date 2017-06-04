@@ -55,6 +55,7 @@
 #include "hello.h"
 #include "Alarm.h"
 #include "synch.h"
+#include <stdlib.h>
 #ifdef THREADS
 extern int testnum;
 #endif
