@@ -16,6 +16,9 @@
 #include "synch.h"
 #include "Table.h"
 #include "BoundedBuffer.h"
+#include "Alarm.h"
+#include "Elevator.h"
+
 using namespace std;
 
 // testnum is set in main.cc
@@ -24,6 +27,11 @@ DLList *list;
 Lock *lock;
 Table *table;
 BoundedBuffer *buffer;
+extern Alarm *g_alarm;
+Building *g_building;
+int numFloors = 5;
+int numElevators = 1;
+int numRiders = 2;
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -35,6 +43,36 @@ BoundedBuffer *buffer;
 void GenerateNItems(int N, DLList *list);
 void RemoveNItems(int N, DLList *list);
 void MergeNItems(DLList *list);
+
+void RiderThread(int which)
+{
+	//building = new Building("building", 10, 1);
+	g_alarm->Pause(1);
+	int from, to;
+	while (1) {
+		from = Random() % numFloors;
+		to = Random() % numFloors;
+		// printf("%d %d\n", from, to);
+		// from = 1;
+		// to = 7;
+		if (to == from) sysAlarm->Pause(1);
+		else rider(which, from, to);
+		// from = 7;
+		// to = 2;
+		// rider(which, from, to);
+	}
+	//building->GetElevator(0)->Run();
+}
+
+void TestElevator()
+{
+	building = new Building("building", 10, 1);
+	for (int i = 0; i < numRiders; i++) {
+		Thread *t = new Thread("rider thread");
+		t->Fork(RiderThread, i);
+	}
+	building->GetElevator(0)->Run();
+}
 void
 SimpleThread1(int which)
 {

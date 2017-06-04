@@ -2,7 +2,7 @@
 #include "system.h"
 #include "utility.h"
 #include "Alarm.h"
-extern Building *building;
+extern Building *g_building;
 extern Alarm *g_alarm;
 Building::Building(char *debugname, int numFloors, int numElevators)
 {
@@ -172,9 +172,9 @@ void Elevator::VisitFloor(int floor)
 		OpenDoors();
 		CloseDoors();
 	}
-	building->m_noElevatorLock->Acquire();
-	building->m_noElevator->Broadcast(building->m_noElevatorLock);
-	building->m_noElevatorLock->Release();
+	g_building->m_noElevatorLock->Acquire();
+	g_building->m_noElevator->Broadcast(g_building->m_noElevatorLock);
+	g_building->m_noElevatorLock->Release();
 }
 
 void Elevator::OpenDoors()
