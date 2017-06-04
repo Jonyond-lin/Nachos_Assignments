@@ -32,6 +32,7 @@ Building *g_building;
 int numFloors = 5;
 int numElevators = 1;
 int numRiders = 2;
+void rider(int id, int srcFloor, int dstFloor);
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -55,7 +56,7 @@ void RiderThread(int which)
 		// printf("%d %d\n", from, to);
 		// from = 1;
 		// to = 7;
-		if (to == from) sysAlarm->Pause(1);
+		if (to == from) g_alarm->Pause(1);
 		else rider(which, from, to);
 		// from = 7;
 		// to = 2;
@@ -66,12 +67,42 @@ void RiderThread(int which)
 
 void TestElevator()
 {
-	building = new Building("building", 10, 1);
+	g_building = new Building("building", 10, 1);
 	for (int i = 0; i < numRiders; i++) {
 		Thread *t = new Thread("rider thread");
 		t->Fork(RiderThread, i);
 	}
-	building->GetElevator(0)->Run();
+	g_building->GetElevator(0)->Run();
+}
+
+void rider(int id, int srcFloor, int dstFloor) {
+	Elevator *e;
+
+	if (srcFloor == dstFloor)
+		return;
+
+	DEBUG('a', "Rider %d travelling from %d to %d\n", id, srcFloor, dstFloor);
+	do {
+		if (srcFloor < dstFloor) {
+			DEBUG('a', "Rider %d CallUp(%d)\n", id, srcFloor);
+			g_building->CallUp(srcFloor);
+			DEBUG('a', "Rider %d AwaitUp(%d)\n", id, srcFloor);
+			e = g_building->AwaitUp(srcFloor);
+		}
+		else {
+			DEBUG('a', "Rider %d CallDown(%d)\n", id, srcFloor);
+			g_building->CallDown(srcFloor);
+			DEBUG('a', "Rider %d AwaitDown(%d)\n", id, srcFloor);
+			e = g_building->AwaitDown(srcFloor);
+		}
+		DEBUG('a', "Rider %d Enter()\n", id);
+	} while (!e->Enter()); // elevator might be full!
+
+	DEBUG('a', "Rider %d RequestFloor(%d)\n", id, dstFloor);
+	e->RequestFloor(dstFloor); // doesn't return until arrival
+	DEBUG('a', "Rider %d Exit()\n", id);
+	e->Exit();
+	DEBUG('a', "Rider %d finished\n", id);
 }
 void
 SimpleThread1(int which)
